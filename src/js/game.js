@@ -15,10 +15,15 @@ class Game {
         this.canvas.width = 800;
         this.canvas.height = 600;
         
-        // Initialize audio
+        // difficultyMultiplier: 0.6 (slow), 1.0 (normal), 1.6 (fast)
+        this.difficultyMultiplier = 1.0;
+        this.hasStarted = false;
+        
+        // Initialize audio (but don't autoplay until user interaction)
         this.audio = new AudioManager();
         
-        this.initialize();
+        // Show start overlay to pick difficulty; game will initialize after selection
+        this.showStartScreen();
     }
 
     initialize() {
@@ -30,11 +35,33 @@ class Game {
         // Setup event listeners
         this.setupControls();
         
-        // Start background music
+        // Start background music (user already interacted when selecting difficulty)
         this.audio.startBackgroundMusic();
         
-        // Start game loop
+        // Mark started and begin loop
+        this.hasStarted = true;
         this.gameLoop();
+    }
+
+    showStartScreen() {
+        const overlay = document.getElementById('startOverlay');
+        if (!overlay) return this.initialize();
+
+        overlay.style.display = 'flex';
+        const buttons = overlay.querySelectorAll('.difficulty-buttons button');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const level = btn.getAttribute('data-level');
+                // Map levels to multipliers
+                if (level === '1') this.difficultyMultiplier = 0.6;
+                else if (level === '2') this.difficultyMultiplier = 1.0;
+                else if (level === '3') this.difficultyMultiplier = 1.6;
+
+                // Hide overlay and start
+                overlay.style.display = 'none';
+                this.initialize();
+            }, { once: true });
+        });
     }
 
     setupControls() {
@@ -107,7 +134,6 @@ class Game {
         this.ctx.font = '18px Arial';
         this.ctx.fillText('Click to Play Again', this.canvas.width / 2, this.canvas.height / 2 + 60);
         
-        // Add click listener for restart
         this.canvas.addEventListener('click', () => this.restart(), { once: true });
     }
 
@@ -118,10 +144,14 @@ class Game {
         this.isGameOver = false;
         
         // Reset entities
-        this.ball.reset();
+        // Recreate entities so their positions match canvas and difficulty
         this.paddle = new Paddle(this);
+        this.ball = new Ball(this);
         this.brickField = new BrickField(this);
-        
+
+        // Resume background music if muted state allows
+        if (!this.audio.isMuted) this.audio.startBackgroundMusic();
+
         // Start game loop again
         this.gameLoop();
     }

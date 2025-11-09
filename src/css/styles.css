@@ -47,3 +47,42 @@ body::before {
     margin: 5px 0;
     font-weight: bold;
 }
+
+/* Start overlay styles */
+.overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.65);
+    z-index: 50;
+}
+.overlay-content {
+    background: linear-gradient(180deg, rgba(20,10,40,0.95), rgba(10,5,25,0.95));
+    padding: 36px;
+    border-radius: 12px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.7), 0 0 30px rgba(100,100,255,0.08) inset;
+}
+.overlay-content h1 {
+    margin: 0 0 8px 0;
+    font-size: 36px;
+}
+.overlay-content p { margin-bottom: 16px; }
+.difficulty-buttons button {
+    margin: 6px;
+    padding: 10px 18px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(180deg,#3aa0ff,#1b7edb);
+    color: white;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+.difficulty-buttons button[data-level="1"] { background: linear-gradient(180deg,#66d9ff,#3aa0ff); }
+.difficulty-buttons button[data-level="2"] { background: linear-gradient(180deg,#7eff8a,#27c94f); }
+.difficulty-buttons button[data-level="3"] { background: linear-gradient(180deg,#ff7ab6,#ff3b6b); }
+.difficulty-buttons button:active { transform: translateY(1px); }

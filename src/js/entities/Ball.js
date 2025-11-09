@@ -8,9 +8,14 @@ export class Ball {
     reset() {
         // Start ball at paddle center
         this.x = this.game.canvas.width / 2;
-        this.y = this.game.canvas.height - 110; // Adjusted to match new paddle position (100 + 10 for ball above paddle)
-        this.dx = 4; // Initial horizontal speed
-        this.dy = -4; // Initial vertical speed
+        // Position the ball just above the paddle; preserve the paddle offset if needed
+        this.y = this.game.canvas.height - 110; // default baseline; paddle may reposition itself
+        // Compute speed based on difficulty multiplier (base speed 4)
+        const baseSpeed = 4;
+        const mul = (this.game && this.game.difficultyMultiplier) ? this.game.difficultyMultiplier : 1.0;
+        const speed = baseSpeed * mul;
+        this.dx = speed; // Initial horizontal speed
+        this.dy = -speed; // Initial vertical speed
     }
 
     update() {
