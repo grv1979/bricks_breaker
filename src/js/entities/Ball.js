@@ -8,7 +8,7 @@ export class Ball {
     reset() {
         // Start ball at paddle center
         this.x = this.game.canvas.width / 2;
-        this.y = this.game.canvas.height - 30;
+        this.y = this.game.canvas.height - 110; // Adjusted to match new paddle position (100 + 10 for ball above paddle)
         this.dx = 4; // Initial horizontal speed
         this.dy = -4; // Initial vertical speed
     }
@@ -21,9 +21,11 @@ export class Ball {
         // Wall collision
         if (this.x + this.radius > this.game.canvas.width || this.x - this.radius < 0) {
             this.dx = -this.dx;
+            this.game.audio.playSound('wall');
         }
         if (this.y - this.radius < 0) {
             this.dy = -this.dy;
+            this.game.audio.playSound('wall');
         }
 
         // Bottom collision (lose life)
@@ -31,6 +33,9 @@ export class Ball {
             this.game.lives--;
             if (this.game.lives > 0) {
                 this.reset();
+            } else {
+                this.game.isGameOver = true;
+                this.game.audio.playSound('gameOver');
             }
         }
     }

@@ -4,7 +4,7 @@ export class Paddle {
         this.width = 100;
         this.height = 10;
         this.x = (game.canvas.width - this.width) / 2;
-        this.y = game.canvas.height - 20;
+        this.y = game.canvas.height - 100; // Moved paddle up to 100px from bottom
     }
 
     move(mouseX) {
