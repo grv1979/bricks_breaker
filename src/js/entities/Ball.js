@@ -41,11 +41,41 @@ export class Ball {
     }
 
     draw(ctx) {
+        // Ball glow effect
+        ctx.shadowColor = '#00ffff';
+        ctx.shadowBlur = 15;
+        
+        // Gradient for the ball
+        const gradient = ctx.createRadialGradient(
+            this.x - this.radius/3, 
+            this.y - this.radius/3, 
+            this.radius/4,
+            this.x,
+            this.y,
+            this.radius
+        );
+        gradient.addColorStop(0, '#ffffff');
+        gradient.addColorStop(1, '#4488ff');
+
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#FFF';
+        ctx.fillStyle = gradient;
         ctx.fill();
-        ctx.closePath();
+
+        // Reset shadow
+        ctx.shadowBlur = 0;
+        
+        // Add highlight
+        ctx.beginPath();
+        ctx.arc(
+            this.x - this.radius/3,
+            this.y - this.radius/3,
+            this.radius/3,
+            0,
+            Math.PI * 2
+        );
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.fill();
     }
 
     checkPaddleCollision(paddle) {

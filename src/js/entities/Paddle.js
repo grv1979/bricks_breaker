@@ -13,10 +13,27 @@ export class Paddle {
     }
 
     draw(ctx) {
+        // Paddle glow effect
+        ctx.shadowColor = '#00ffff';
+        ctx.shadowBlur = 15;
+        
+        // Main paddle body
+        const gradient = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.height);
+        gradient.addColorStop(0, '#4488ff');
+        gradient.addColorStop(1, '#2266dd');
+        
         ctx.beginPath();
-        ctx.rect(this.x, this.y, this.width, this.height);
-        ctx.fillStyle = '#0095DD';
+        ctx.roundRect(this.x, this.y, this.width, this.height, 5);
+        ctx.fillStyle = gradient;
         ctx.fill();
-        ctx.closePath();
+
+        // Highlight
+        ctx.beginPath();
+        ctx.roundRect(this.x + 2, this.y + 1, this.width - 4, this.height/3, 3);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.fill();
+
+        // Reset shadow
+        ctx.shadowBlur = 0;
     }
 }
